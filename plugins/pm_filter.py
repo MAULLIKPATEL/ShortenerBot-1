@@ -720,7 +720,7 @@ async def auto_filter(client, msg, spoll=False):
              )
 
     btn.append([
-                InlineKeyboardButton("🤔 How To Download ", url=f"https://t.me/DTG_TV/60"),
+                InlineKeyboardButton("🤔 How To Download ", url=f"https://t.me/DTG_BOTS/65"),
             ])
     btn.append([
                 InlineKeyboardButton("Ai Ho Toh Aisa - YouTube", url=f"https://openinapp.co/Ai-ho-toh-aisa-par01"),
