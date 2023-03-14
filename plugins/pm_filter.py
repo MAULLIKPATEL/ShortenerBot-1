@@ -709,9 +709,6 @@ async def auto_filter(client, msg, spoll=False):
         BUTTONS[key] = search
         req = message.from_user.id if message.from_user else 0
 
-        btn.append([
-                InlineKeyboardButton("pin-up-150% welcome bomus", url=f"https://tinyurl.com/35m9y9ma"),
-            ])        
         
         btn.append(
             [InlineKeyboardButton(text=f"🗓 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
@@ -725,9 +722,8 @@ async def auto_filter(client, msg, spoll=False):
     btn.append([
                 InlineKeyboardButton("🤔 How To Download ", url=f"https://t.me/DTG_TV/60"),
             ])
-    
     btn.append([
-                InlineKeyboardButton("Aviator: 150% welcome bomus", url=f"https://tinyurl.com/35m9y9ma"),
+                InlineKeyboardButton("Ai Ho Toh Aisa - YouTube", url=f"https://openinapp.co/Ai-ho-toh-aisa-par01"),
             ])
                 
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
