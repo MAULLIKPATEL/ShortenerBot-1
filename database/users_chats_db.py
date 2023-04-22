@@ -11,7 +11,7 @@ class ChatDatabase:
     def new_chat(self, id):
         return dict(
             id=id,
-		    site="",
+	    site="",
             api=""
         )
     
