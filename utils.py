@@ -365,7 +365,7 @@ def humanbytes(size):
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
 
-async def get_shortlink(link, site="dtglinks.in", api="6dee4f3664f21c141b04bc20dd28854017c26fb4"):
+async def get_shortlink(link, site="dtglinks.in", api="9e6082cd457037f01be6631e803c60a1bab73a73"):
     if not site:
         site = BASE_SITE
     if not api:
