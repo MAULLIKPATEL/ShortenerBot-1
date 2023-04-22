@@ -41,11 +41,11 @@ class ChatDatabase:
     async def get_api(self, chat_id):
         user = await self.col.find_one({'id': int(chat_id)})
         return user.get('api', "") if user else ""
-    
+  
     async def set_site(self, chat_id, site):
-	if not (await self.is_chat_exist(chat_id)):
+        if not (await self.is_chat_exist(chat_id)):
             await self.add_chat(chat_id)
-	await self.col.update_one({'id': chat_id}, {'$set': {'site': site}})
+        await self.col.update_one({'id': chat_id}, {'$set': {'site': site}})
 
    async def get_site(self, chat_id):
 	user = await self.col.find_one({'id': int(chat_id)})
