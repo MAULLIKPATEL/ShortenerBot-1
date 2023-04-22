@@ -127,11 +127,13 @@ async def next_page(bot, query):
     if not files:
         return
     settings = await get_settings(query.message.chat.id)
+    chat_site = await chat_db.get_site(message.chat.id)
+    chat_api = await chat_db.get_api(chat_id=query.message.chat.id)
     if settings['button']:
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")
+                    text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}", api=chat_api , site=chat_site)
                 ),
             ]
             for file in files
@@ -144,7 +146,7 @@ async def next_page(bot, query):
                 ),
                 InlineKeyboardButton(
                     text=f"{get_size(file.file_size)}",
-                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}")
+                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}", api=chat_api , site=chat_site)
                 ),
             ]
             for file in files
@@ -667,6 +669,8 @@ async def auto_filter(client, msg, spoll=False):
     if not spoll:
         message = msg
         settings = await get_settings(message.chat.id)
+        chat_site = await chat_db.get_site(message.chat.id)
+        chat_api = await chat_db.get_api(message.chat.id)
         if message.text.startswith("/"): return  # ignore commands
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
@@ -677,6 +681,8 @@ async def auto_filter(client, msg, spoll=False):
             return
     else:
         settings = await get_settings(msg.message.chat.id)
+        chat_site = await chat_db.get_site(message.chat.id)
+        chat_api = await chat_db.get_api(message.chat.id)        
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
@@ -684,7 +690,8 @@ async def auto_filter(client, msg, spoll=False):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=pre_{file.file_id}")
+                    text=f"[{get_size(file.file_size)}] {file.file_name}", 
+                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=pre_{file.file_id}", api=chat_api , site=chat_site)
                 ),
             ]
             for file in files
@@ -694,11 +701,11 @@ async def auto_filter(client, msg, spoll=False):
             [
                 InlineKeyboardButton(
                     text=f"{file.file_name}",
-                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=pre_{file.file_id}")
+                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=pre_{file.file_id}", api=chat_api , site=chat_site)
                 ),
                 InlineKeyboardButton(
                     text=f"{get_size(file.file_size)}",
-                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=pre_{file.file_id}")
+                    url=await get_shortlink(f"https://telegram.me/{temp.U_NAME}?start=pre_{file.file_id}", api=chat_api , site=chat_site)
                 ),
             ]
             for file in files
