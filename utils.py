@@ -365,10 +365,12 @@ def humanbytes(size):
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
 
-async def get_shortlink(link, api="6dee4f3664f21c141b04bc20dd28854017c26fb4"):
+async def get_shortlink(link, site="dtglinks.in", api="6dee4f3664f21c141b04bc20dd28854017c26fb4"):
+    if not site:
+        site = BASE_SITE
     if not api:
         api = SHORTENER_API
-    shortz = shortzy.Shortzy(api, "dtglinks.in")
+    shortz = shortzy.Shortzy(api, site)
     if api:
         if LONG_DROPLINK_URL == "True" or LONG_DROPLINK_URL is True:
             return await shortz.get_quick_link(link)
