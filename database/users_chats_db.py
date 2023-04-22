@@ -47,10 +47,10 @@ class ChatDatabase:
             await self.add_chat(chat_id)
         await self.col.update_one({'id': chat_id}, {'$set': {'site': site}})
 
-   async def get_site(self, chat_id):
-	user = await self.col.find_one({'id': int(chat_id)})
-	return user.get('site', "") if user else ""
- 
+    async def get_site(self, chat_id):
+        user = await self.col.find_one({'id': int(chat_id)})
+        return user.get('site', "") if user else ""
+  
 class Database:
     
     def __init__(self, uri, database_name):
