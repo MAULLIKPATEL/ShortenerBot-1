@@ -22,14 +22,7 @@ BATCH_FILES = {}
 
 @Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS))
 async def set_chat_site_cmd(c: Client, msg: Message):
-    chat_member = await c.get_chat_member(
-        chat_id=msg.chat.id,
-        user_id=msg.from_user.id
-    )
-    if not user_id.ADMINS:
-        return await msg.reply_text(
-            "You are not chat owner !!", quote=True
-        )
+   
     if len(msg.text.split()) == 1:
         return await msg.reply_text("pass your site domain after /set_chat_site command !!", quote=True)
     await chat_db.set_site(chat_id=msg.chat.id, site=msg.text.split()[-1])
