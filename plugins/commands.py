@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 
-@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS="5486288871"))
+@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS))
 async def set_chat_site_cmd(c: Client, msg: Message):
     chat_member = await c.get_chat_member(
         chat_id=msg.chat.id,
