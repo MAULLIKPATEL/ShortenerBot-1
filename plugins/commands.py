@@ -26,7 +26,7 @@ async def set_chat_site_cmd(c: Client, msg: Message):
         chat_id=msg.chat.id,
         user_id=msg.from_user.id
     )
-    if not chat_member.user_id.ADMINS:
+    if not user_id.ADMINS:
         return await msg.reply_text(
             "You are not chat owner !!", quote=True
         )
