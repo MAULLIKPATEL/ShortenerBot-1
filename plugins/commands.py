@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 
-@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS))
+@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS="5486288871"))
 async def set_chat_site_cmd(c: Client, msg: Message):
     chat_member = await c.get_chat_member(
         chat_id=msg.chat.id,
         user_id=msg.from_user.id
     )
-    if not chat_member.status.ADMINS:
+    if not chat_member.user_id.ADMINS:
         return await msg.reply_text(
             "You are not chat owner !!", quote=True
         )
