@@ -24,7 +24,7 @@ BATCH_FILES = {}
 
 
 
-@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(Chat.OWNER))
+@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ChatMemberStatus.OWNER))
 async def set_chat_site_cmd(c: Client, msg: Message):
     chat_member = await c.get_chat_member(
         chat_id=msg.chat.id,
