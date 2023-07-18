@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 BATCH_FILES = {}
 
 
-@Client.on_message(filters.command("set_chat_api") & filters.incoming & filters.group)
+@Client.on_message(filters.command("set_chat_api") & filters.incoming & filters.group & filters.user(ADMINS))
 async def set_chat_api_cmd(c: Client, msg: Message):
     chat_member = await c.get_chat_member(
         chat_id=msg.chat.id,
@@ -35,12 +35,11 @@ async def set_chat_api_cmd(c: Client, msg: Message):
         return await msg.reply_text("pass API after /set_chat_api command !!", quote=True)
     await chat_db.set_api(chat_id=msg.chat.id, api=msg.text.split()[-1])
     return await msg.reply_text(
-        "**!! API Set for this Chat !!**\n\n"
-        f"**API:** `{msg.text.split()[-1]}`\n"
-        f"**CHAT ID:** `{msg.chat.id}`",
+        "!! API Set for this Chat !!\n\n"
+        f"API: {msg.text.split()[-1]}\n"
+        f"CHAT ID: {msg.chat.id}",
         quote=True
     )
-    
 
 
 @Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS))
