@@ -1,3 +1,4 @@
+
 import os
 import logging
 import random
@@ -5,18 +6,64 @@ import asyncio
 from Script import script
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from database.ia_filterdb import Media, get_file_details, unpack_new_file_id
 from database.users_chats_db import db
 from info import CHANNELS, ADMINS, AUTH_CHANNEL, LOG_CHANNEL, PICS, BATCH_FILE_CAPTION, CUSTOM_FILE_CAPTION, PROTECT_CONTENT
 from utils import get_settings, get_shortlink, get_size, is_subscribed, save_group_settings, temp
 from database.connections_mdb import active_connection
+from database.users_chats_db import db, chat_db
 import re
 import json
 import base64
 logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
+
+
+@Client.on_message(filters.command("set_chat_api") & filters.incoming & filters.group & filters.user(ADMINS))
+async def set_chat_api_cmd(c: Client, msg: Message):
+    chat_member = await c.get_chat_member(
+        chat_id=msg.chat.id,
+        user_id=msg.from_user.id
+    )
+    if not ADMINS:
+        return await msg.reply_text(
+            "You are not chat owner !!", quote=True
+        )
+    if len(msg.text.split()) == 1:
+        return await msg.reply_text("pass API after /set_chat_api command !!", quote=True)
+    await chat_db.set_api(chat_id=msg.chat.id, api=msg.text.split()[-1])
+    return await msg.reply_text(
+        "!! API Set for this Chat !!\n\n"
+        f"API: {msg.text.split()[-1]}\n"
+        f"CHAT ID: {msg.chat.id}",
+        quote=True
+    )
+
+
+@Client.on_message(filters.command("set_chat_site") & filters.incoming & filters.group & filters.user(ADMINS))
+async def set_chat_site_cmd(c: Client, msg: Message):
+    chat_member = await c.get_chat_member(
+        chat_id=msg.chat.id,
+        user_id=msg.from_user.id
+    )
+    if not ADMINS:
+        return await msg.reply_text(
+            "You are not chat owner !!", quote=True
+        )
+   
+    if len(msg.text.split()) == 1:
+        return await msg.reply_text("pass your site domain after /set_chat_site command !!", quote=True)
+    await chat_db.set_site(chat_id=msg.chat.id, site=msg.text.split()[-1])
+    return await msg.reply_text(
+        "**!! SITE Set for this Chat !!**\n\n"
+        f"**SITE:** `{msg.text.split()[-1]}`\n"
+        f"**CHAT ID:** `{msg.chat.id}`",
+        quote=True
+    )
+
+
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):

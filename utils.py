@@ -1,6 +1,6 @@
 import logging
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
-from info import AUTH_CHANNEL, LONG_DROPLINK_URL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM, SHORTENER_API
+from info import AUTH_CHANNEL, LONG_DROPLINK_URL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM, SHORTENER_API, BASE_SITE
 from imdb import IMDb
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton
@@ -365,9 +365,13 @@ def humanbytes(size):
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
 
-shortz = shortzy.Shortzy(SHORTENER_API, "dtglinks.in")
-async def get_shortlink(link):
-    if SHORTENER_API:
+async def get_shortlink(link, site="dtglinks.in", api="9e6082cd457037f01be6631e803c60a1bab73a73"):
+    if not site:
+        site = BASE_SITE
+    if not api:
+        api = SHORTENER_API
+    shortz = shortzy.Shortzy(api, site)
+    if api:
         if LONG_DROPLINK_URL == "True" or LONG_DROPLINK_URL is True:
             return await shortz.get_quick_link(link)
         else:

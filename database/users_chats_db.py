@@ -1,7 +1,57 @@
 # https://github.com/odysseusmax/animated-lamp/blob/master/bot/database/database.py
+import certifi
 import motor.motor_asyncio
 from info import DATABASE_NAME, DATABASE_URI, IMDB, IMDB_TEMPLATE, MELCOW_NEW_USERS, P_TTI_SHOW_OFF, SINGLE_BUTTON, SPELL_CHECK_REPLY, PROTECT_CONTENT
 
+class ChatDatabase:
+    def __init__(self, uri, database_name):
+        self._client = motor.motor_asyncio.AsyncIOMotorClient(uri, tlsCAFile=certifi.where())
+        self.db = self._client[database_name]
+        self.col = self.db.users
+
+    def new_chat(self, id):
+        return dict(
+            id=id,
+	    site="",
+            api=""
+        )
+    
+    async def add_chat(self, id):
+        chat = self.new_chat(id)
+        await self.col.insert_one(chat)
+
+    async def is_chat_exist(self, id):
+        chat = await self.col.find_one({'id': int(id)})
+        return bool(chat)
+
+    async def total_chats_count(self):
+        count = await self.col.count_documents({})
+        return count
+
+    async def get_all_chats(self):
+        return self.col.find({})
+
+    async def delete_chat(self, chat_id):
+        await self.col.delete_many({'id': int(chat_id)})
+
+    async def set_api(self, chat_id, api):
+        if not (await self.is_chat_exist(chat_id)):
+            await self.add_chat(chat_id)
+        await self.col.update_one({'id': chat_id}, {'$set': {'api': api}})
+
+    async def get_api(self, chat_id):
+        user = await self.col.find_one({'id': int(chat_id)})
+        return user.get('api', "") if user else ""
+  
+    async def set_site(self, chat_id, site):
+        if not (await self.is_chat_exist(chat_id)):
+            await self.add_chat(chat_id)
+        await self.col.update_one({'id': chat_id}, {'$set': {'site': site}})
+
+    async def get_site(self, chat_id):
+        user = await self.col.find_one({'id': int(chat_id)})
+        return user.get('site', "") if user else ""
+  
 class Database:
     
     def __init__(self, uri, database_name):
@@ -144,3 +194,4 @@ class Database:
 
 
 db = Database(DATABASE_URI, DATABASE_NAME)
+chat_db = ChatDatabase(DATABASE_URI, "ShortenerChatsDB")
